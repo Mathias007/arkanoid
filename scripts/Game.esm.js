@@ -7,6 +7,7 @@ import { resultScreen } from "./ResultScreen.esm.js";
 import { userData } from "./UserData.esm.js";
 import { mainMenu } from "./MainMenu.esm.js";
 import { Sprite } from "./Sprite.esm.js";
+import { Paddle } from "./Paddle.esm.js";
 
 class Game extends Common {
     constructor() {
@@ -17,6 +18,7 @@ class Game extends Common {
         window.removeEventListener(DATALOADED_EVENT_NAME, this.playLevel);
 
         this.background = new Sprite(0, 33, 800, 450, media.spriteImage, 0, 0);
+        this.paddle = new Paddle();
         // this.gameState = new GameState();
         this.changeVisibilityScreen(canvas.element, VISIBLE_SCREEN);
         this.changeVisibilityScreen(
@@ -35,6 +37,7 @@ class Game extends Common {
 
     drawSprites() {
         this.background.draw(0, 1.25);
+        this.paddle.draw();
     }
 
     checkEndOfGame() {
