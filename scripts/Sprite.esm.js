@@ -2,11 +2,13 @@ import { canvas } from "./Canvas.esm.js";
 
 export class Sprite {
     constructor(
-        x,
-        y,
+        spriteX,
+        spriteY,
         width,
         height,
         spritesImage,
+        x,
+        y,
         numberOfSprites = 1,
         offset = { x: 0, y: 0 }
     ) {
@@ -15,6 +17,8 @@ export class Sprite {
         this.numberOfSprites = numberOfSprites;
         this.offset = { ...offset };
         this.spritesImage = spritesImage;
+        this.spriteStartX = spriteX;
+        this.spriteStartY = spriteY;
         this.width = width;
         this.x = x;
         this.y = y;
@@ -29,10 +33,13 @@ export class Sprite {
             canvas.context.globalAlpha = this.alpha / 255;
         }
 
+        const startPointToDrawX =
+            numberOfSprites * this.width + this.spriteStartX;
+
         canvas.context.drawImage(
             this.spritesImage,
-            numberOfSprites * this.width,
-            0,
+            startPointToDrawX,
+            this.spriteStartY,
             this.width,
             this.height,
             this.x + this.offset.x,

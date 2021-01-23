@@ -104,7 +104,7 @@ class Media {
     }
 
     get spriteImage() {
-        return this._psriteImage;
+        return this._spriteImage;
     }
 
     toggleMusicOnOff() {
