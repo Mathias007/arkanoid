@@ -44,6 +44,7 @@ class Game extends Common {
     animate() {
         this.ball.moveAndCheckCollision();
         this.handleKeyboardClick();
+        this.checkCollisionBallWithPaddle();
         this.drawSprites();
         this.checkEndOfGame();
     }
@@ -74,6 +75,20 @@ class Game extends Common {
         }
     }
 
+    checkCollisionBallWithPaddle() {
+        const { dx, dy } = this.ball;
+
+        if (this.ball.dy < 0) {
+            return;
+        }
+
+        const vector = { dx, dy };
+
+        if (this.ball.checkCollisionWithAnotherSprite(vector, this.paddle)) {
+            this.ball.dy = -(Math.floor(Math.random() * 3) + 3);
+        }
+    }
+
     drawSprites() {
         this.background.draw(0, 1.25);
         this.paddle.draw();
@@ -85,11 +100,7 @@ class Game extends Common {
             media.isInLevel = false;
             media.stopBackgroundMusic();
 
-            resultScreen.viewResultScreen(
-                isPlayerWinner,
-                this.gameState.getPlayerPoints(),
-                currentLevel
-            );
+            resultScreen.viewResultScreen(true);
         } else {
             this.animationFrame = window.requestAnimationFrame(() =>
                 this.animate()

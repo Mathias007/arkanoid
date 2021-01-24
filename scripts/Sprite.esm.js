@@ -52,4 +52,30 @@ export class Sprite {
             canvas.context.globalAlpha = 1;
         }
     }
+
+    checkCollisionWithAnotherSprite(vector, anotherSprite) {
+        const [
+            collisionPointX,
+            collisionPointY,
+        ] = this.getProperlyCollisionPoints(vector);
+
+        if (
+            anotherSprite.x < collisionPointX &&
+            collisionPointX < anotherSprite.x + anotherSprite.width &&
+            anotherSprite.y < collisionPointY &&
+            collisionPointY < anotherSprite.y + anotherSprite.height
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    getProperlyCollisionPoints(vector) {
+        const collisionPointX = vector.dx < 0 ? this.x : this.x + this.width;
+
+        const collisionPointY = vector.dy < 0 ? this.y : this.y + this.height;
+
+        return [collisionPointX, collisionPointY];
+    }
 }
