@@ -1,6 +1,5 @@
 import { Common, VISIBLE_SCREEN } from "./Common.esm.js";
 import { DATALOADED_EVENT_NAME } from "./Loader.esm.js";
-// import { gameLevels } from "./gameLevels.esm.js";
 import { canvas } from "./Canvas.esm.js";
 import { media } from "./Media.esm.js";
 import { resultScreen } from "./ResultScreen.esm.js";
@@ -15,6 +14,7 @@ import {
     KEY_CODE_RIGHT,
 } from "./KeyboardController.esm.js";
 import { Ball } from "./Ball.esm.js";
+import { GameState } from "./GameState.esm.js";
 
 const PLAYER_SPEED = 10;
 
@@ -29,8 +29,7 @@ class Game extends Common {
         this.background = new Sprite(0, 33, 800, 450, media.spriteImage, 0, 0);
         this.paddle = new Paddle();
         this.ball = new Ball();
-        this.gameState = { isGamePaused: false };
-        // this.gameState = new GameState();
+        this.gameState = new GameState(level);
         this.changeVisibilityScreen(canvas.element, VISIBLE_SCREEN);
         this.changeVisibilityScreen(
             mainMenu.miniSettingsLayerElement,
@@ -91,6 +90,7 @@ class Game extends Common {
 
     drawSprites() {
         this.background.draw(0, 1.25);
+        this.gameState.getGameBoard().forEach((block) => block.draw());
         this.paddle.draw();
         this.ball.draw();
     }
@@ -100,7 +100,7 @@ class Game extends Common {
             media.isInLevel = false;
             media.stopBackgroundMusic();
 
-            resultScreen.viewResultScreen(true);
+            resultScreen.viewResultScreen(false);
         } else {
             this.animationFrame = window.requestAnimationFrame(() =>
                 this.animate()
