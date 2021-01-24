@@ -12,4 +12,4 @@ class KeyBoardController {
     }
 }
 
-export const keyBoardController = new KeyBoardController();
+export const keyboardController = new KeyBoardController();

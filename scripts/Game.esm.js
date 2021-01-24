@@ -3,14 +3,14 @@ import { DATALOADED_EVENT_NAME } from "./Loader.esm.js";
 import { canvas } from "./Canvas.esm.js";
 import { media } from "./Media.esm.js";
 import { resultScreen } from "./ResultScreen.esm.js";
-// import { userData } from "./UserData.esm.js";
+import { userData } from "./UserData.esm.js";
 import { mainMenu } from "./MainMenu.esm.js";
 import { Sprite } from "./Sprite.esm.js";
 import { Paddle } from "./Paddle.esm.js";
 import {
-    keyBoardController,
-    KEY_CODE_LEFT,
+    keyboardController,
     KEY_CODE_PAUSE,
+    KEY_CODE_LEFT,
     KEY_CODE_RIGHT,
 } from "./KeyboardController.esm.js";
 import { Ball } from "./Ball.esm.js";
@@ -41,35 +41,37 @@ class Game extends Common {
     }
 
     animate() {
-        this.ball.moveAndCheckCollision(this.gameState.getGameBoard());
         this.handleKeyboardClick();
-        this.checkCollisionBallWithPaddle();
+        if (!this.gameState.isGamePaused) {
+            this.ball.moveAndCheckCollision(this.gameState.getGameBoard());
+            this.checkCollisionBallWithPaddle();
+        }
         this.drawSprites();
         this.checkEndOfGame();
     }
 
     handleKeyboardClick() {
-        const { clickedKey: key } = keyBoardController;
+        const { clickedKey: key } = keyboardController;
 
         if (!key) {
             return;
         }
 
-        if (key == KEY_CODE_PAUSE) {
-            this.gameState.isGamePaused = true;
-            keyBoardController.clickedKey = null;
+        if (key === KEY_CODE_PAUSE) {
+            this.gameState.isGamePaused = !this.gameState.isGamePaused;
+            keyboardController.clickedKey = null;
             return;
         }
 
         if (!this.gameState.isGamePaused && key === KEY_CODE_LEFT) {
             for (let i = PLAYER_SPEED; this.paddle.movePlayerLeft() && i; i--);
-            keyBoardController.clickedKey = null;
+            keyboardController.clickedKey = null;
             return;
         }
 
         if (!this.gameState.isGamePaused && key === KEY_CODE_RIGHT) {
             for (let i = PLAYER_SPEED; this.paddle.movePlayerRight() && i; i--);
-            keyBoardController.clickedKey = null;
+            keyboardController.clickedKey = null;
             return;
         }
     }
@@ -77,7 +79,7 @@ class Game extends Common {
     checkCollisionBallWithPaddle() {
         const { dx, dy } = this.ball;
 
-        if (this.ball.dy < 0) {
+        if (dy < 0) {
             return;
         }
 
@@ -91,16 +93,22 @@ class Game extends Common {
     drawSprites() {
         this.background.draw(0, 1.25);
         this.gameState.getGameBoard().forEach((block) => block.draw());
-        this.paddle.draw();
         this.ball.draw();
+        this.paddle.draw();
     }
 
     checkEndOfGame() {
         if (this.ball.hadHitOnBottomEdge()) {
             media.isInLevel = false;
             media.stopBackgroundMusic();
-
             resultScreen.viewResultScreen(false);
+        } else if (!this.gameState.getGameBoard().length) {
+            const nextLevel = Number(this.gameState.level) + 1;
+
+            media.isInLevel = false;
+            media.stopBackgroundMusic();
+            userData.addNewLevel(nextLevel);
+            resultScreen.viewResultScreen(true);
         } else {
             this.animationFrame = window.requestAnimationFrame(() =>
                 this.animate()

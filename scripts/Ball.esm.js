@@ -1,6 +1,6 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./Canvas.esm.js";
-import { PADDLE_HEIGHT } from "./Paddle.esm.js";
 import { Sprite } from "./Sprite.esm.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./Canvas.esm.js";
+import { PADDLE_HEIGHT } from "./Paddle.esm.js";
 import { media } from "./Media.esm.js";
 
 const BALL_START_X_SPRITE = 232;
