@@ -7,6 +7,7 @@ export class GameState {
         );
 
         this._level = level;
+        this.isGamePaused = false;
 
         this.isPlayerWinner = () => _playerScores >= this._pointsToWin;
         this.getGameBoard = () => _gameBoard;
