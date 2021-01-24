@@ -46,7 +46,7 @@ class LevelSelect extends Common {
     }
 
     loadLevel(level) {
-        if (media.spriteImage && media.backgoundMusic) {
+        if (media.spriteImage && media.backgroundMusic) {
             game.playLevel(level);
             return;
         }
@@ -55,8 +55,8 @@ class LevelSelect extends Common {
             media.spriteImage = loader.loadImage("images/spritessheet.png");
         }
 
-        if (!media.backgoundMusic) {
-            media.backgoundMusic = loader.loadSound(
+        if (!media.backgroundMusic) {
+            media.backgroundMusic = loader.loadSound(
                 "sounds/music-background.mp3"
             );
         }
